@@ -1,2 +1,0 @@
-GET https://api.github.com/user/starred?page=1
-Authorization: bearer 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
