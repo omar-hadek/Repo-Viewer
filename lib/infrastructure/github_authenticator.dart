@@ -49,7 +49,7 @@ class GithubAuthenticator {
   }
 
   //whether the user signed in or not
-  Future<void> signIn() =>
+  Future<bool> isSignedIn() =>
       getSignedInCredentials().then((credentials) => credentials != null);
 
   // create authorization code grant

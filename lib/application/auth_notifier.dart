@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:github_app/domain/auth_failure.dart';
 import 'package:github_app/infrastructure/github_authenticator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 part 'auth_notifier.freezed.dart';
@@ -8,8 +9,10 @@ class AuthState with _$AuthState {
   const factory AuthState.initial() = _Initial;
   const factory AuthState.unauthenticated() = _UnAuthenticated;
   const factory AuthState.authenticated() = _Authenticated;
-  const factory AuthState.failure() = _Failure;
+  const factory AuthState.failure(AuthFailure failure) = _Failure;
 }
+
+typedef AuthUriCallBack = Future<Uri> Function(Uri authorizationUrl);
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final GithubAuthenticator _authenticator;
@@ -19,5 +22,20 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = (await _authenticator.isSignedIn())
         ? const AuthState.authenticated()
         : const AuthState.unauthenticated();
+  }
+
+  Future<void> signIn(AuthUriCallBack authorizationCallBack) async {
+    final grant = _authenticator.createGrant();
+    final redirectUrl =
+        await authorizationCallBack(_authenticator.getAuthorizationUrl(grant));
+    final failureOrSuccess = await _authenticator.handleAuthorizationUrl(
+      grant,
+      redirectUrl.queryParameters,
+    );
+
+    state = failureOrSuccess.fold(
+      (l) => AuthState.failure(l),
+      (r) => const AuthState.authenticated(),
+    );
   }
 }
