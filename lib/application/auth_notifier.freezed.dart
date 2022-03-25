@@ -11,7 +11,8 @@ part of 'auth_notifier.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods',
+);
 
 /// @nodoc
 class _$AuthStateTearOff {
@@ -476,12 +477,14 @@ class __$FailureCopyWithImpl<$Res> extends _$AuthStateCopyWithImpl<$Res>
   $Res call({
     Object? failure = freezed,
   }) {
-    return _then(_Failure(
-      failure == freezed
-          ? _value.failure
-          : failure // ignore: cast_nullable_to_non_nullable
-              as AuthFailure,
-    ));
+    return _then(
+      _Failure(
+        failure == freezed
+            ? _value.failure
+            : failure // ignore: cast_nullable_to_non_nullable
+                as AuthFailure,
+      ),
+    );
   }
 
   @override
