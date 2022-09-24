@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:github_app/auth/application/auth_notifier.dart';
 import 'package:github_app/auth/shared/auth_providers.dart';
+import 'package:github_app/core/shared/providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'routes/app_router.gr.dart';
 
 final initializationProvider = FutureProvider((ref) async {
+  ref.read(sembastProvider).init();
   final authNotifier = ref.read(authNotifierProvider.notifier);
   await authNotifier.checkAndUpdateAuthStatus();
 });
