@@ -4,6 +4,7 @@ import 'package:github_app/core/infrastructure/network_exception.dart';
 import 'package:github_app/core/infrastructure/remote_response.dart';
 import 'package:github_app/github/core/infrastructure/github_headers.dart';
 import 'package:github_app/github/core/infrastructure/github_repo_dto.dart';
+import 'package:github_app/github/core/infrastructure/pagination_config.dart';
 import '../../../core/infrastructure/github_headers_cache.dart';
 import '../../../../core/infrastructure/dio_extentions.dart';
 
@@ -16,11 +17,10 @@ class StarredReposRemoteService {
       int page) async {
     const token = 'some token here';
     const accept = 'application/vnd.github.v3.html+json';
-    final requestUri = Uri.https(
-      'api.github.com',
-      '/user/starred',
-      {'page': '$page'},
-    );
+    final requestUri = Uri.https('api.github.com', '/user/starred', {
+      'page': '$page',
+      'per_page': PaginationConfig.itemsPerPage.toString(),
+    });
     final prevousHeaders = await _gihtubHeadersCache.getHeaders(requestUri);
     try {
       final response = await _dio.getUri(
